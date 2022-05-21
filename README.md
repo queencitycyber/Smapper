@@ -5,45 +5,38 @@
 
 <h4 align="center">passive Nmap like scanner built with shodan.io</h4>
 
-<p align="center">
-  <a href="https://github.com/s0md3v/Smap/releases">
-    <img src="https://img.shields.io/github/release/s0md3v/Smap.svg?label=version">
-  </a>
-  <a href="https://github.com/s0md3v/Smap/releases">
-    <img src="https://img.shields.io/github/downloads/s0md3v/Smap/total">
-  </a>
-  <a href="https://github.com/s0md3v/SMap/issues?q=is%3Aissue+is%3Aclosed">
-      <img src="https://img.shields.io/github/issues-closed-raw/s0md3v/Smap?color=dark-green&label=issues%20fixed">
-  </a>
-  <a href="https://travis-ci.com/s0md3v/Smap">
-      <img src="https://img.shields.io/travis/com/s0md3v/Smap.svg?color=dark-green&label=tests">
-  </a>
-</p>
 
 <p align="center"><img src="/static/smap-demo.png" alt="Smap demo"></p>
 
 ---
 
-Smap is a replica of Nmap which uses shodan.io's free API for port scanning. It takes same command line arguments as Nmap and produces the same output which makes it a drop-in replacament for Nmap.
+Smap is a replica of Nmap which uses shodan.io's free API for port scanning. It takes same command line arguments as Nmap and produces the same output which makes it a drop-in replacament for Nmap.  
+
+This is just a simple fork. Instead of the top [1237 ports](https://api.shodan.io/shodan/ports) default ports scanned by Shodan and the original repo, I grabbed the [top 2000](https://www.shodan.io/search/facet?query=net%3A0%2F0&facet=port). 
+
+To do this, I used a close combination of the following:
+
+
+```bash
+shodan stats --facets port:2000 net:0/0 > shodanclitop2k.txt
+awk '{ print $1 }' shodanclitop2k.txt > shodantop2k.txt
+(readarray -t ARRAY < shodantop2k.txt; IFS=','; echo "${ARRAY[*]}")
+```
+
+From there, it's just a simple swap.
 
 ## Features
 - Scans 200 hosts per second
-- Doesn't require any account/api key
 - Vulnerability detection
 - Supports all nmap's output formats
 - Service and version fingerprinting
 - Makes no contact to the targets
+- Doesn't require any account/api key
 
 ## Installation
-### Binaries
-You can download a pre-built binary from [here](https://github.com/s0md3v/Smap/releases) and use it right away.
-
-### Manual
-`go install -v github.com/s0md3v/smap/cmd/smap@latest`
-
-Confused or something not working? For more detailed instructions, [click here](https://github.com/s0md3v/Smap/wiki/FAQ#how-do-i-install-smap)
-### AUR pacakge
-Smap is available on AUR as [smap-git](https://aur.archlinux.org/packages/smap-git) (builds from source) and [smap-bin](https://aur.archlinux.org/packages/smap-bin) (pre-built binary).
+```
+go install -v github.com/queencitycyber/smap/cmd/smap@latest
+```
 
 ## Usage
 Smap takes the same arguments as Nmap but options other than `-p`, `-h`, `-o*`, `-iL` are ignored. If you are unfamiliar with Nmap, here's how to use Smap.
@@ -85,7 +78,7 @@ oJ    // json
 > Note: Since Nmap doesn't scan/display vulnerabilities and tags, that data is not available in nmap's formats. Use `-oS` to view that info.
 
 ### Specifying ports
-Smap scans these [1237 ports](https://gist.githubusercontent.com/s0md3v/3e953e8e15afebc1879a2245e74fc90f/raw/1e20288e9bef43b60f7306b6f7e23044dabd9b8c/shodan_ports.txt) by default. If you want to display results for certain ports, use the `-p` option.
+Smap scans these [2000 ports](https://raw.githubusercontent.com/queencitycyber/Smap/main/shodantop2k.md) by default. If you want to display results for certain ports, use the `-p` option.
 
 ```
 smap -p21-30,80,443 -iL targets.txt
@@ -97,7 +90,7 @@ Since Smap simply fetches existent port data from shodan.io, it is super fast bu
 #### You want
 - vulnerability detection
 - a super fast port scanner
-- results for most common ports (top 1237)
+- results for most common ports (top 2000)
 - no connections to be made to the targets
 
 #### You are okay with
