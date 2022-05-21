@@ -1,16 +1,7 @@
-<h1 align="center">
-  <br>
-  <a href="https://github.com/s0md3v/smap"><img src="/static/smap-logo.png" alt="Smap logo"></a>
-</h1>
-
-<h4 align="center">passive Nmap like scanner built with shodan.io</h4>
-
-
-<p align="center"><img src="/static/smap-demo.png" alt="Smap demo"></p>
 
 ---
 
-Smap is a replica of Nmap which uses shodan.io's free API for port scanning. It takes same command line arguments as Nmap and produces the same output which makes it a drop-in replacament for Nmap.  
+Smapper is a fork of [Smap](https://github.com/s0md3v/Smap) which is a replica of Nmap that uses shodan.io's free API for port scanning. It takes same command line arguments as Nmap and produces the same output which makes it a drop-in replacament for Nmap.  
 
 This is just a simple fork. Instead of the top [1237 ports](https://api.shodan.io/shodan/ports) default ports scanned by Shodan and the original repo, I grabbed the [top 2000](https://www.shodan.io/search/facet?query=net%3A0%2F0&facet=port). 
 
